@@ -7,10 +7,12 @@ const connectdb = async() =>{
         // console.log(MONGODB_URL)
         console.log("database connection successfully")
     }
-    catch{
+    catch(error){
         if(error.name === 'MongooseServerSelectionError')
             {
                 console.log('Error:Connection refused')
+                console.log(error);
+                
             }
             else{
                 console.log('Error while conncting to database servser')
