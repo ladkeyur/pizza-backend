@@ -1,17 +1,21 @@
 const usermodel = require('../Models/user_model')
 const jwt = require('jsonwebtoken')
 const {jwt_secret_key} = require('../utility/config')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 
 //#region  ner user
 const newuser = async(req,res)=>{
     try{
         const user = req.body;
+        console.log("Request body:", user);
         if(!user){
             return res.status(400).json({status:false, data:{message:"user is null"}})
         }
+        if (!user.password) {
+            return res.status(400).json({ error: "Password is required" });
+        }
+        const hashpwrd = await  bcrypt.hash(user.password,10)
 
-        const hashpwrd = await  bcrypt.hash(user.password,8)
         const dbuser =new usermodel({username:user.username,email:user.email,password:hashpwrd,mobileno:user.mobileno,address:user.address,houseno:user.houseno,pincode:user.pincode,city:user.city,usertype:user.usertype})
         await dbuser.save()
 

@@ -11,31 +11,35 @@ const router = express.Router()
 
 const app = express()
 
-app.use(cors())
+// app.use(cors())
+app.use(cors({
+  origin: 'https://charming-swan-6fba93.netlify.app', // Your frontend domain
+  credentials: true
+}));
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 
-
-// app.use((req, res, next) => {
-//     if (
-//         req.headers['content-type'] &&
-//         req.headers['content-type'].includes('application/json')
-//     ) {
-//         let raw = '';
-//         req.on('data', chunk => (raw += chunk));
-//         req.on('end', () => {
-//             try {
-//                 req.body = JSON.parse(raw);
-//                 console.log('✅ Parsed body:', req.body);
-//             } catch (e) {
-//                 console.log('❌ JSON parse error:', e.message);
-//                 req.body = {};
-//             }
-//             next();
-//         });
-//     } else {
-//         next();
-//     }
-// })
+app.use((req, res, next) => {
+    if (
+        req.headers['content-type'] &&
+        req.headers['content-type'].includes('application/json')
+    ) {
+        let raw = '';
+        req.on('data', chunk => (raw += chunk));
+        req.on('end', () => {
+            try {
+                req.body = JSON.parse(raw);
+                console.log('✅ Parsed body:', req.body);
+            } catch (e) {
+                console.log('❌ JSON parse error:', e.message);
+                req.body = {};
+            }
+            next();
+        });
+    } else {
+        next();
+    }
+})
 
 conn()
 router.get('/ping', (req, res) => {
@@ -47,6 +51,7 @@ router.use('/api',categoryrouter)
 router.use('/product',productrouter)
 router.use('/size',sizerouter)
 router.use('/order',orderrouter)
+app.use('/.netlify/functions/index',router)
 
 module.exports.handler=serverless(app)
 

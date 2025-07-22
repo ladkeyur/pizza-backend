@@ -3,7 +3,7 @@ const router = express.Router()
 const {newuser, getuserdata,updatedata, deletedata, login, Authverify} = require('../controllers/user_controller')
 const Auth = require('../middleware/auth_verify')
 const {mailsend} = require('../controllers/mail_controller')
-// const uploading = require('../utility/upload')
+
 
 
 router.post('/',newuser)
