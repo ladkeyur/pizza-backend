@@ -48,7 +48,7 @@ const updatedata = async(req,res) => {
     try{
         const id = req.params.id
         const user = req.body
-        if(!user){
+        if(!user || !id ){
             return res.stutus(400).json({status: false, data:{message:"user is null"}})
         }
 
