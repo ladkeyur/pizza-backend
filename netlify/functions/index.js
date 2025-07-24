@@ -13,7 +13,7 @@ const app = express()
 
 // app.use(cors())
 app.use(cors({
-  origin: 'https://charming-swan-6fba93.netlify.app', // Your frontend domain
+  origin: 'https://charming-swan-6fba93.netlify.app',
   credentials: true
 }));
 app.use(express.json())
